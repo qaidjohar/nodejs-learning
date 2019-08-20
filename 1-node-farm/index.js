@@ -42,7 +42,7 @@ const replaceTemplate = (temp, product) => {
     output = output.replace(/{%FROM%}/g, product.from)
     output = output.replace(/{%NUTRIENTS%}/g, product.nutrients)
     output = output.replace(/{%QUANTITY%}/g, product.quantity)
-    output = output.replace(/{%DSCRIPTION%}/g, product.description)
+    output = output.replace(/{%DESCRIPTION%}/g, product.description)
     output = output.replace(/{%ID%}/g, product.id)
     if(!product.organic) output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic')
     return output;
@@ -57,12 +57,12 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8')
 const dataObj = JSON.parse(data)
 
 const server = http.createServer((req, res) => {
-    console.log(req.url)
-
-    const pathName = req.url
+    //console.log(req.url)
+    const { query, pathname} = url.parse(req.url, true)
+    //const pathName = req.url
 
     // Overview Page
-    if(pathName === '/' || pathName === '/overview'){
+    if(pathname === '/' || pathname === '/overview'){
         res.writeHead(200, { 'Content-type': 'text/html'})
 
         const cardsHtml = dataObj.map(el => replaceTemplate(tempCard, el)).join('')
@@ -71,11 +71,16 @@ const server = http.createServer((req, res) => {
         res.end(output)
 
     // Product Page
-    } else if(pathName === '/product'){
-        res.end('This is product')
+    } else if(pathname === '/product'){
+        console.log(query)
+        res.writeHead(200, { 'Content-type': 'text/html'})
+        const product = dataObj[query.id]
+        const output = replaceTemplate(tempProduct, product)
+        console.log(product)
+        res.end(output)
 
     // API Page
-    } else if(pathName === '/api'){
+    } else if(pathname === '/api'){
         res.writeHead(200, { 'Content-type': 'application/json'})
         res.end(data)
        
