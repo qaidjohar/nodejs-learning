@@ -38,15 +38,26 @@ const getDogPic = async () => {
   return '2. READY 🐶';
 };
 
-console.log('1. I will Get dog pic');
-getDogPic()
-  .then(x => {
+(async () => {
+  try {
+    console.log('1. I will Get dog pic');
+    const x = await getDogPic();
     console.log(x);
     console.log('3. I got the Link');
-  })
-  .catch(err => {
+  } catch (err) {
     console.log('ERROR 🤯');
-  });
+  }
+})();
+
+// console.log('1. I will Get dog pic');
+// getDogPic()
+//   .then(x => {
+//     console.log(x);
+//     console.log('3. I got the Link');
+//   })
+//   .catch(err => {
+//     console.log('ERROR 🤯');
+//   });
 
 ////Promise Read and Write Files
 /*readFilePro(`${__dirname}/dog.txt`)
