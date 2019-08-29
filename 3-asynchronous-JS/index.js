@@ -33,10 +33,20 @@ const getDogPic = async () => {
     console.log('Random Dog image saved to file😊');
   } catch (err) {
     console.log(err);
+    throw err;
   }
+  return '2. READY 🐶';
 };
-getDogPic();
-console.log('Execution Started');
+
+console.log('1. I will Get dog pic');
+getDogPic()
+  .then(x => {
+    console.log(x);
+    console.log('3. I got the Link');
+  })
+  .catch(err => {
+    console.log('ERROR 🤯');
+  });
 
 ////Promise Read and Write Files
 /*readFilePro(`${__dirname}/dog.txt`)
