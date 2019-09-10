@@ -8,17 +8,14 @@ const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
-console.log(DB);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   })
-  .then(con => {
-    console.log(con.connections);
-    console.log('DB Connection Success');
-  })
+  .then(() => console.log('DB Connection Success'))
   .catch(err => {
     console.log(err);
   });
