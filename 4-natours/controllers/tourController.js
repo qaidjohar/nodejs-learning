@@ -4,20 +4,30 @@ const Tour = require('../models/tourModel');
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 // );
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing Name or Price'
-    });
-  }
-  next();
-};
-
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.requestTime);
-    const tours = await Tour.find();
+    //Build the Query
+    const queryObj = { ...req.query };
+    const excludedFiles = ['page', 'sort', 'limit', 'fields'];
+    excludedFiles.forEach(el => delete queryObj[el]);
+    console.log(req.query, queryObj);
+    // const tours = await Tour.find({
+    //   duration: 5,
+    //   difficulty: 'easy'
+    // });
+
+    // const query = Tour.find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy');
+
+    // Execute the Query
+    const query = Tour.find(queryObj);
+    // { difficulty: 'easy', duration:{$get:5}}
+    const tours = await query;
+
+    // Send Response
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
